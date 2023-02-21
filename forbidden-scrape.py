@@ -27,129 +27,32 @@ cardContent = []
 count = 0
 
 
-for data in soup.select('.cardlist_effect'):
+def getCardTypes(soup, cardType):
     count = 0
-    cardContent.clear()
-    for cardInfo in data.select('td'):
-        print(count)
-        print(cardInfo.text)
-        cardContent.append(cardInfo.text)
-        if(cardInfo.has_attr('colspan')):
+    for data in soup.select('.{}'.format(cardType)):
+        count = 0
+        cardContent.clear()
+        for cardInfo in data.select('td'):
+            print(count)
+            print(cardInfo.text)
             cardContent.append(cardInfo.text)
+            if(cardInfo.has_attr('colspan')):
+                cardContent.append(cardInfo.text)
+                count += 1
             count += 1
-        count += 1
-        if(count % 5 == 0 and count != 0):
-            cards.append(card(cardContent[0], cardContent[1], cardContent[2], cardContent[3], cardContent[4]))
-  
+            if(count % 5 == 0 and count != 0):
+                cards.append(card(cardContent[0], cardContent[1], cardContent[2], cardContent[3], cardContent[4]))
 
-for data in soup.select('.cardlist_monster'):
-    count = 0
-    cardContent.clear()
-    for cardInfo in data.select('td'):
-        print(count)
-        print(cardInfo.text)
-        cardContent.append(cardInfo.text)
-        if(cardInfo.has_attr('colspan')):
-            cardContent.append(cardInfo.text)
-            count += 1
-        count += 1
-        if(count % 5 == 0 and count != 0):
-            cards.append(card(cardContent[0], cardContent[1], cardContent[2], cardContent[3], cardContent[4]))
-            
+getCardTypes(soup, 'cardlist_effect')
+getCardTypes(soup, 'cardlist_monster')
+getCardTypes(soup, 'cardlist_fusion')
+getCardTypes(soup, 'cardlist_synchro')
+getCardTypes(soup, 'cardlist_xyz')
+getCardTypes(soup, 'cardlist_link')
+getCardTypes(soup, 'cardlist_spell')
+getCardTypes(soup, 'cardlist_trap')
+    
 
-for data in soup.select('.cardlist_fusion'):
-    count = 0
-    cardContent.clear()
-    for cardInfo in data.select('td'):
-        print(count)
-        print(cardInfo.text)
-        cardContent.append(cardInfo.text)
-        if(cardInfo.has_attr('colspan')):
-            cardContent.append(cardInfo.text)
-            count += 1
-        count += 1
-        if(count % 5 == 0 and count != 0):
-            cards.append(card(cardContent[0], cardContent[1], cardContent[2], cardContent[3], cardContent[4]))
-  
-
-for data in soup.select('.cardlist_synchro'):
-    count = 0
-    cardContent.clear()
-    for cardInfo in data.select('td'):
-        print(count)
-        print(cardInfo.text)
-        cardContent.append(cardInfo.text)
-        if(cardInfo.has_attr('colspan')):
-            cardContent.append(cardInfo.text)
-            count += 1
-        count += 1
-        if(count % 5 == 0 and count != 0):
-            cards.append(card(cardContent[0], cardContent[1], cardContent[2], cardContent[3], cardContent[4]))
-  
-
-for data in soup.select('.cardlist_xyz'):
-    count = 0
-    cardContent.clear()
-    for cardInfo in data.select('td'):
-        print(count)
-        print(cardInfo.text)
-        cardContent.append(cardInfo.text)
-        if(cardInfo.has_attr('colspan')):
-            cardContent.append(cardInfo.text)
-            count += 1
-        count += 1
-        if(count % 5 == 0 and count != 0):
-            cards.append(card(cardContent[0], cardContent[1], cardContent[2], cardContent[3], cardContent[4]))
-  
-for data in soup.select('.cardlist_link'):
-    count = 0
-    cardContent.clear()
-    for cardInfo in data.select('td'):
-        print(count)
-        print(cardInfo.text)
-        cardContent.append(cardInfo.text)
-        if(cardInfo.has_attr('colspan')):
-            cardContent.append(cardInfo.text)
-            count += 1
-        count += 1
-        if(count % 5 == 0 and count != 0):
-            cards.append(card(cardContent[0], cardContent[1], cardContent[2], cardContent[3], cardContent[4]))
-  
-
-for data in soup.select('.cardlist_spell'):
-    count = 0
-    cardContent.clear()
-    for cardInfo in data.select('td'):
-        print(count)
-        print(cardInfo.text)
-        cardContent.append(cardInfo.text)
-        if(cardInfo.has_attr('colspan')):
-            cardContent.append(cardInfo.text)
-            count += 1
-        count += 1
-        if(count % 5 == 0 and count != 0):
-            cards.append(card(cardContent[0], cardContent[1], cardContent[2], cardContent[3], cardContent[4]))
-  
-
-
-
-for data in soup.select('.cardlist_trap'):
-    count = 0
-    cardContent.clear()
-    for cardInfo in data.select('td'):
-        print(count)
-        print(cardInfo.text)
-        cardContent.append(cardInfo.text)
-        if(cardInfo.has_attr('colspan')):
-            cardContent.append(cardInfo.text)
-            count += 1
-        count += 1
-        if(count % 5 == 0 and count != 0):
-            cards.append(card(cardContent[0], cardContent[1], cardContent[2], cardContent[3], cardContent[4]))
-  
-
-
-print(cards)
 
 for c in cards:
     if(c.remarks.find("Was") != -1 or c.remarks.find("New") != -1):
