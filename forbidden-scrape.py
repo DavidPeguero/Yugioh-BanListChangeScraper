@@ -5,6 +5,16 @@ import bs4 as bs
 import pandas as pd
 import urllib.request
 from dataclasses import dataclass
+import PySimpleGUI as sg
+
+sg.theme('amber')
+
+
+layout = [[sg.Text("Somethin")],
+          [sg.Text("Somethin else"), sg.Input()],
+          [sg.Button("wut"), sg.Button("cancel")]]
+
+window = sg.Window('Yugioh - Forbidden/Limited Cards', layout)
 
 @dataclass
 class card:
@@ -51,15 +61,42 @@ getCardTypes(soup, 'cardlist_xyz')
 getCardTypes(soup, 'cardlist_link')
 getCardTypes(soup, 'cardlist_spell')
 getCardTypes(soup, 'cardlist_trap')
+
+toprow = ['Type', 'Name', 'Advanced Format', 'Traditional Format', 'Remarks']
+rows = []
+for idx, c in enumerate(cards):
+    rows.append([c.type, c.name, c.advFormat, c.tradFormat, c.remarks])
+
+
+
+tbl1 = sg.Table(values=rows, headings=toprow,
+   auto_size_columns=True,
+   display_row_numbers=False,
+   justification='center', key='-TABLE-',
+   selected_row_colors='black on white',
+   enable_events=True,
+   expand_x=True,
+   expand_y=True,
+)
     
 
 
-for c in cards:
-    if(c.remarks.find("Was") != -1 or c.remarks.find("New") != -1):
-        print(c.type)
-        print(c.name)
-        print(c.advFormat)
-        print(c.tradFormat)
-        print(c.remarks)
-        print("\n")
+# for c in cards:
+#     if(c.remarks.find("Was") != -1 or c.remarks.find("New") != -1):
+#         print(c.type)
+#         print(c.name)
+#         print(c.advFormat)
+#         print(c.tradFormat)
+#         print(c.remarks)
+#         print("\n")
         
+layout = [[tbl1]]
+window = sg.Window("Yugioh Forbidden/Limited List", layout, size=(715, 200), resizable=True)
+while True:
+   event, values = window.read()
+   print("event:", event, "values:", values)
+   if event == sg.WIN_CLOSED:
+      break
+   if '+CLICKED+' in event:
+      sg.popup("You clicked row:{} Column: {}".format(event[2][0], event[2][1]))
+window.close()
