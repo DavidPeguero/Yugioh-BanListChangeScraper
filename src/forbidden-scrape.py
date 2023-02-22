@@ -65,11 +65,12 @@ def populateList(url, rowArray):
 
     for c in cArray:
         cName = re.sub('[\s]+'," ", c.name)
-        
+        cAdvFormat = re.sub('[\s]+'," ", c.advFormat)
+        cTradFormat = re.sub('[\s]+'," ", c.tradFormat)
         cName = cName.replace(u"\u2013", "-")
 
         print(cName)
-        rowArray.append([c.type, cName, c.advFormat, c.tradFormat, c.remarks])
+        rowArray.append([c.type, cName, cAdvFormat, cTradFormat, c.remarks])
     return 
 
 
@@ -80,11 +81,13 @@ populateList('https://www.yugioh-card.com/en/limited/list_12-01-2022/' , rows)
 #Creating the table with all the appropriate flags
 tbl1 = sg.Table(values=rows, headings=toprow,
    auto_size_columns=True,
+   max_col_width=40,
    display_row_numbers=False,
    justification='center', key='-TABLE-',
    background_color="black",
    selected_row_colors='white on blue',
    enable_events=True,
+   enable_click_events=True,
    expand_x=True,
    expand_y=True,
 )
@@ -95,16 +98,20 @@ searchCard = sg.Button('Search')
 updateList = sg.Button('Update')
 
 #Set up layout of main window 
-layout = [[sg.Input(key='-UPDATE-'), updateList],
-    [sg.Input(key='-INPUT-'), searchCard]
+layout = [[sg.Input("Insert any official Konami Banlist. Hint: Use Wayback Machine for older banlists", size=(90, 1), key='-UPDATE-'), updateList],
+    [sg.Input(size=(70, 1),key='-INPUT-'), searchCard]
     ,[tbl1]]
 
 #Create window
 window = sg.Window("Yugioh Forbidden/Limited List", layout, size=(1200, 800), resizable=True, finalize=True, icon=".\/assets\ygo_judgement.ico")
 table = window['-TABLE-']
 entry = window['-INPUT-']
+update = window['-UPDATE-']
+update.bind('<Button-1>', '+Click+')
 entry.bind('<Return>', 'RETURN-')
-table.bind("<Double-Button-1>", " DOUBLE-")
+table.bind('<Double-Button-1>', 'DOUBLE-')
+table.bind('<Return>', 'RETURN-')
+
 
 def openDescription(cardName):
     response = req.get(api + cardName)
@@ -127,7 +134,7 @@ def openDescription(cardName):
     
 
 
-
+placeHolder = True
 while True:
     event, values = window.read()
     print("event:", event, "values:", values)
@@ -155,8 +162,11 @@ while True:
         table.update(row_colors=row_colors)
 
     #On selecting a element in the table it displays the card information
-    if event in ('-TABLE-DOUBLE-') :
+    if event == ('-TABLE-DOUBLE-') or event == ('-TABLE-RETURN-') :
        openDescription(rows[values['-TABLE-'][0]][1])
-       
 
+    if event == ('-UPDATE-+Click+') and placeHolder:
+        placeHolder = False
+        update.update('')
+        
 window.close()
