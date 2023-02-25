@@ -134,8 +134,8 @@ def openDescription(cardName):
     cardWindow['-IMAGE-'].update(data = image)
     
 
-
 placeHolder = True
+curRows = []
 while True:
     event, values = window.read()
     print("event:", event, "values:", values)
@@ -168,9 +168,10 @@ while True:
             if data[0].lower().find(values['-INPUT-'].lower()) != -1 or data[1].lower().find(values['-INPUT-'].lower()) != -1 or data[2].lower().find(values['-INPUT-'].lower()) != -1 or data[4].lower().find(values['-INPUT-'].lower()) != -1:
                 tempRows.append(data)
         table.update(values = tempRows)
+        curRows = tempRows.copy()
     #On selecting a element in the table it displays the card information
     if event == ('-TABLE-DOUBLE-') or event == ('-TABLE-RETURN-') :
-       openDescription(rows[values['-TABLE-'][0]][1])
+       openDescription(curRows[values['-TABLE-'][0]][1])
 
     if event == ('-UPDATE-+Click+') and placeHolder:
         placeHolder = False
