@@ -109,6 +109,7 @@ entry = window['-INPUT-']
 update = window['-UPDATE-']
 update.bind('<Button-1>', '+Click+')
 entry.bind('<Return>', 'RETURN-')
+entry.bind('<Key>', 'KEY-')
 table.bind('<Double-Button-1>', 'DOUBLE-')
 table.bind('<Return>', 'RETURN-')
 
@@ -161,6 +162,12 @@ while True:
                 row_colors.append((row, sg.theme_background_color()))
         table.update(row_colors=row_colors)
 
+    if event == '-INPUT-KEY-':
+        tempRows = []
+        for data in rows:
+            if data[0].lower().find(values['-INPUT-'].lower()) != -1 or data[1].lower().find(values['-INPUT-'].lower()) != -1 or data[2].lower().find(values['-INPUT-'].lower()) != -1 or data[4].lower().find(values['-INPUT-'].lower()) != -1:
+                tempRows.append(data)
+        table.update(values = tempRows)
     #On selecting a element in the table it displays the card information
     if event == ('-TABLE-DOUBLE-') or event == ('-TABLE-RETURN-') :
        openDescription(rows[values['-TABLE-'][0]][1])
